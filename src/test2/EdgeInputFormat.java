@@ -29,7 +29,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.io.ArrayWritable;
 public class EdgeInputFormat extends
 org.apache.giraph.io.formats.TextEdgeInputFormat<LongWritable,
-Text> {
+ArrayWritable> {
 
 public EdgeInputFormat() {
 
@@ -43,16 +43,19 @@ TextEdgeReaderFromEachLine {
 
 protected LongWritable getSourceVertexId(org.apache.hadoop.io.Text
 line) {
-
+	 //System.out.println(Long.parseLong(line.toString().split(":")[0]));
 return new LongWritable(
 
 Long.parseLong(line.toString().split(":")[0]));
+
 
 }
 
 
 protected LongWritable getTargetVertexId(org.apache.hadoop.io.Text
 line) {
+	//System.out.println(Long.parseLong(line.toString().split(":")[1]));
+	
 
 return new LongWritable(
 
@@ -61,11 +64,20 @@ Long.parseLong(line.toString().split(":")[1]));
 }
 
 
-protected Text getValue(org.apache.hadoop.io.Text line) {
+protected ArrayWritable getValue(org.apache.hadoop.io.Text line) {
 	String str = line.toString().split(":")[2];
-	Text t1 = new Text(str);	
-	 System.out.println(t1);
-	return t1;
+	
+	String[] intArray = str.split(",");
+	
+	//String[] intArray = Arrays.stream(str.toString().split(","));
+		   // .mapToDouble(Double::parseDouble)
+		    //.toArray();
+	
+	ArrayWritable p = new ArrayWritable(intArray);
+	
+	//Text t1 = new Text(str);	
+	 //System.out.println(t1);
+	return p;
 	
 	
 //	String arr[] = str.split(",");
@@ -90,7 +102,7 @@ protected Text getValue(org.apache.hadoop.io.Text line) {
 }
 
 
-public EdgeReader<LongWritable, Text> createEdgeReader(
+public EdgeReader<LongWritable, ArrayWritable> createEdgeReader(
 
 InputSplit split, TaskAttemptContext context) throws IOException {
 
