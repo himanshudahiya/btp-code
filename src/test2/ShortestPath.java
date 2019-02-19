@@ -40,10 +40,12 @@ import org.apache.hadoop.io.Text;
  */
 
 public class ShortestPath extends BasicComputation<
-    LongWritable, DoubleWritable,Text, DoubleWritable> {
+    LongWritable, DoubleWritable,ArrayWritable, DoubleWritable> {
+	
   /** The shortest paths id */
+
   public static final LongConfOption SOURCE_ID =
-      new LongConfOption("SimpleShortestPathsVertex.sourceId", 0,
+      new LongConfOption("SimpleShortestPathsVertex.sourceId", 3,
           "The shortest paths id");
   
   public static final LongConfOption TIME_ID =
@@ -60,17 +62,19 @@ public class ShortestPath extends BasicComputation<
    * @param vertex Vertex
    * @return True if the source id
    */
-  private boolean isSource(Vertex<LongWritable, DoubleWritable, Text> vertex) {
+  
+  private boolean isSource(Vertex<LongWritable, DoubleWritable, ArrayWritable> vertex) {
     return vertex.getId().get() == SOURCE_ID.get(getConf());
   }
+
   
   @Override
   public void compute(
-		  
-      Vertex<LongWritable, DoubleWritable, Text> vertex,
+		 
+      Vertex<LongWritable, DoubleWritable, ArrayWritable> vertex,
       Iterable<DoubleWritable> messages) throws IOException {
-	  System.out.println("Entered compute   ==========================");
-	  System.out.println(vertex.getId());
+  System.out.println("Entered compute   ==========================");
+//	  System.out.println(vertex.getId());
 	  
 	    if (getSuperstep() == 0) {
 	        vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
@@ -85,16 +89,19 @@ public class ShortestPath extends BasicComputation<
 	      }
 	      if (minDist < vertex.getValue().get()) {
 	    	//  System.out.println(minDist);
-	    	  System.out.println(vertex.getId());
+	    	  //System.out.println(vertex.getId());
 	        vertex.setValue(new DoubleWritable(minDist));
-	        for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
+	        for (Edge<LongWritable, ArrayWritable> edge : vertex.getEdges()) {
 	        	
 	        	
-	        	double[] intArray = Arrays.stream(edge.getValue().toString().split(","))
-	        		    .mapToDouble(Double::parseDouble)
-	        		    .toArray();
-	        	
-	        	
+	        	//double[] intArray = Arrays.stream(edge.getValue().toString().split(","))
+	        		    //.mapToDouble(Double::parseDouble)
+	        		    //.toArray();
+	        	ArrayWritable intArrays =  edge.getValue();
+	        	System.out.println("####################################################################");
+	        	//System.out.println(intArrays[2]);
+	        	double[] intArray =  (double[]) intArrays.toArray();
+	        	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 	        	//int[] edgeval = edge.getValue().toString()
 	          double distance =  intArray[(int) minDist];
 	          if (LOG.isDebugEnabled()) {
@@ -106,7 +113,7 @@ public class ShortestPath extends BasicComputation<
 	          sendMessage(edge.getTargetVertexId(), new DoubleWritable(distance));
 	        } 
 	      }
-	      System.out.println(vertex.getValue());
+	      //System.out.println(vertex.getValue());
 	      vertex.voteToHalt();
 	    }
 

@@ -25,14 +25,16 @@ public class GiraphDemoRunner implements Tool {
 	}
 	public int run ( String [] arg0 ) throws Exception {
 		String inputPath ="/tmp/tiny_graph.txt";
-		String outputPath ="/tmp/graph_out1121";
+
+
+		String outputPath ="/tmp/graph_byuus";
 		
 		GiraphConfiguration giraphConf = new GiraphConfiguration ( getConf () );
-		giraphConf . setComputationClass (ShortestPath . class );
-//		giraphConf . setVertexInputFormatClass (JsonLongDoubleFloatDoubleVertexInputFormat . class );
-		giraphConf.setEdgeInputFormatClass(EdgeInputFormat.class);
+		giraphConf . setComputationClass (ShortestPath. class );
+	//	giraphConf . setVertexInputFormatClass (JsonLongDoubleFloatDoubleVertexInputFormat . class );
+	giraphConf.setEdgeInputFormatClass(EdgeInputFormat.class);
 
-		GiraphFileInputFormat . addVertexInputPath ( giraphConf ,new Path ( inputPath ));
+		GiraphFileInputFormat .addEdgeInputPath ( giraphConf ,new Path ( inputPath ));
 		giraphConf . setVertexOutputFormatClass (IdWithValueTextOutputFormat . class );
 		giraphConf . setLocalTestMode ( true );
 		giraphConf . setWorkerConfiguration (1 , 1, 100) ;
