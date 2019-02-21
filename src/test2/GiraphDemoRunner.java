@@ -25,8 +25,10 @@ public class GiraphDemoRunner implements Tool {
 		this . conf = conf ;
 	}
 	public int run ( String [] arg0 ) throws Exception {
+
 		String inputPath ="/tmp/testfile.txt";
 		String outputPath ="/tmp/testfile_output1";
+
 		
 		GiraphConfiguration giraphConf = new GiraphConfiguration ( getConf () );
 		giraphConf . setComputationClass (ShortestPath. class );
