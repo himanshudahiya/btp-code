@@ -6,12 +6,15 @@ import org.apache.giraph.edge.Edge;
 import org.apache.giraph.graph.Vertex;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 
 import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
+
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.EdgeFactory;
 import org.apache.giraph.io.EdgeReader;
@@ -25,8 +28,8 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
-//import org.apache.giraph.utils.ArrayWritable;
-import org.apache.hadoop.io.ArrayWritable;
+import org.apache.giraph.utils.ArrayWritable;
+//import org.apache.hadoop.io.ArrayWritable;
 public class EdgeInputFormat extends
 org.apache.giraph.io.formats.TextEdgeInputFormat<LongWritable,
 ArrayWritable> {
@@ -69,12 +72,24 @@ protected ArrayWritable getValue(org.apache.hadoop.io.Text line) {
 	
 	String[] intArray = str.split(",");
 	
-	//String[] intArray = Arrays.stream(str.toString().split(","));
-		   // .mapToDouble(Double::parseDouble)
+	//Writable[] intArray = Arrays.stream(str.toString().split(","));
+		    //.mapToDouble(Double::parseDouble)
 		    //.toArray();
-	
-	ArrayWritable p = new ArrayWritable(intArray);
-	
+	IntWritable[] intWriArray = new IntWritable[intArray.length];
+	for (int i=0;i<intArray.length;i++) {
+		intWriArray[i] = new IntWritable(Integer.parseInt(intArray[i]));
+	}
+		    
+
+//	   int[] in =   Arrays.stream(intArray.split(','))
+//	                 .mapToInt(Integer::parseInt)
+//	                 .toArray();
+////	
+	ArrayWritable p = new ArrayWritable(IntWritable.class,intWriArray);
+   // p.set(intWriArray);
+	//System.out.println(p);
+//System.out.println("helloooooo");
+
 	//Text t1 = new Text(str);	
 	 //System.out.println(t1);
 	return p;

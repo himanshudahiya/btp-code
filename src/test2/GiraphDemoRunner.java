@@ -14,6 +14,7 @@ import org . apache . hadoop . util . Tool ;
 import org . apache . hadoop . util . ToolRunner ;
 import test2.ShortestPath;
 import test2.EdgeInputFormat;
+import org.apache.giraph.utils.ArrayWritable;
 public class GiraphDemoRunner implements Tool {
 
 	private Configuration conf ;
@@ -24,14 +25,13 @@ public class GiraphDemoRunner implements Tool {
 		this . conf = conf ;
 	}
 	public int run ( String [] arg0 ) throws Exception {
-		String inputPath ="/tmp/tiny_graph.txt";
-		String outputPath ="/tmp/graph_byuus";
+		String inputPath ="/tmp/testfile.txt";
+		String outputPath ="/tmp/testfile_output1";
 		
 		GiraphConfiguration giraphConf = new GiraphConfiguration ( getConf () );
 		giraphConf . setComputationClass (ShortestPath. class );
 	//	giraphConf . setVertexInputFormatClass (JsonLongDoubleFloatDoubleVertexInputFormat . class );
-	giraphConf.setEdgeInputFormatClass(EdgeInputFormat.class);
-
+		giraphConf.setEdgeInputFormatClass(EdgeInputFormat.class);
 		GiraphFileInputFormat .addEdgeInputPath ( giraphConf ,new Path ( inputPath ));
 		giraphConf . setVertexOutputFormatClass (IdWithValueTextOutputFormat . class );
 		giraphConf . setLocalTestMode ( true );
@@ -39,8 +39,10 @@ public class GiraphDemoRunner implements Tool {
 		giraphConf . SPLIT_MASTER_WORKER . set ( giraphConf , false );
 		InMemoryVertexOutputFormat . initializeOutputGraph (giraphConf );
 		GiraphJob giraphJob = new GiraphJob ( giraphConf ,"GiraphDemo ");
+	
 		FileOutputFormat . setOutputPath ( giraphJob.getInternalJob () , new Path ( outputPath ));
 		giraphJob . run ( true );
+	//	System.out.println("effffffffffffffffffffffffffffffffffffffffff");
 		return 0;
 	}
 	

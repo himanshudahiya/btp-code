@@ -24,9 +24,12 @@ import org.apache.giraph.graph.BasicComputation;
 import org.apache.giraph.conf.LongConfOption;
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.graph.Vertex;
-import org.apache.hadoop.io.ArrayWritable;
+//import org.apache.hadoop.io.ArrayWritable;
+import org.apache.hadoop.io.Writable;
+
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.log4j.Logger;
 import java.io.IOException;
@@ -34,7 +37,7 @@ import java.util.Arrays;
 
 import org.apache.hadoop.io.Text;
 //import org.apache.hadoop.io.ArrayWritable;
-//import org.apache.giraph.utils.ArrayWritable;
+import org.apache.giraph.utils.ArrayWritable;
 /**
  * Demonstrates the basic Pregel shortest paths implementation.
  */
@@ -73,7 +76,7 @@ public class ShortestPath extends BasicComputation<
 		 
       Vertex<LongWritable, DoubleWritable, ArrayWritable> vertex,
       Iterable<DoubleWritable> messages) throws IOException {
-  System.out.println("Entered compute   ==========================");
+  //System.out.println("Entered compute   ==========================");
 //	  System.out.println(vertex.getId());
 	  
 	    if (getSuperstep() == 0) {
@@ -98,16 +101,24 @@ public class ShortestPath extends BasicComputation<
 	        		    //.mapToDouble(Double::parseDouble)
 	        		    //.toArray();
 	        	ArrayWritable intArrays =  edge.getValue();
-	        	System.out.println("####################################################################");
+	        	//System.out.println("####################################################################");
 	        	//System.out.println(intArrays[2]);
-	        	double[] intArray =  (double[]) intArrays.toArray();
-	        	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+	        	IntWritable[] beforearray =   (IntWritable[]) intArrays.get();
+	        	
+	        	double[] intArray=new double[beforearray.length];
+	        	for (int i=0;i<beforearray.length;i++) {
+	        		intArray[i]=(double)beforearray[i].get();
+	        	}
+	        	
+	        	
+	        	
+	        	//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 	        	//int[] edgeval = edge.getValue().toString()
 	          double distance =  intArray[(int) minDist];
-	          if (LOG.isDebugEnabled()) {
-	            LOG.debug("Vertex " + vertex.getId() + " sent to " +
-	                edge.getTargetVertexId() + " = " + distance);
-	          }
+	        ////  if (LOG.isDebugEnabled()) {
+	          //  LOG.debug("Vertex " + vertex.getId() + " sent to " +
+	         //       edge.getTargetVertexId() + " = " + distance);
+	        //  }
 	       //   System.out.println("Vertex " + vertex.getId() + " sent to " +
 		     //           edge.getTargetVertexId() + " = " + distance);
 	          sendMessage(edge.getTargetVertexId(), new DoubleWritable(distance));
