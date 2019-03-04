@@ -27,12 +27,11 @@ public class GiraphDemoRunner implements Tool {
 	public int run ( String [] arg0 ) throws Exception {
 
 		String inputPath ="/tmp/testfile.txt";
-		String outputPath ="/tmp/testfile_output1";
+		String outputPath ="/tmp/testfile_output1_7313_0";
 
 		
 		GiraphConfiguration giraphConf = new GiraphConfiguration ( getConf () );
 		giraphConf . setComputationClass (ShortestPath. class );
-	//	giraphConf . setVertexInputFormatClass (JsonLongDoubleFloatDoubleVertexInputFormat . class );
 		giraphConf.setEdgeInputFormatClass(EdgeInputFormat.class);
 		GiraphFileInputFormat .addEdgeInputPath ( giraphConf ,new Path ( inputPath ));
 		giraphConf . setVertexOutputFormatClass (IdWithValueTextOutputFormat . class );
@@ -44,7 +43,6 @@ public class GiraphDemoRunner implements Tool {
 	
 		FileOutputFormat . setOutputPath ( giraphJob.getInternalJob () , new Path ( outputPath ));
 		giraphJob . run ( true );
-	//	System.out.println("effffffffffffffffffffffffffffffffffffffffff");
 		return 0;
 	}
 	

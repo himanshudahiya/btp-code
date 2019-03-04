@@ -46,7 +46,7 @@ TextEdgeReaderFromEachLine {
 
 protected LongWritable getSourceVertexId(org.apache.hadoop.io.Text
 line) {
-	 //System.out.println(Long.parseLong(line.toString().split(":")[0]));
+	
 return new LongWritable(
 
 Long.parseLong(line.toString().split(":")[0]));
@@ -57,7 +57,7 @@ Long.parseLong(line.toString().split(":")[0]));
 
 protected LongWritable getTargetVertexId(org.apache.hadoop.io.Text
 line) {
-	//System.out.println(Long.parseLong(line.toString().split(":")[1]));
+	
 	
 
 return new LongWritable(
@@ -72,46 +72,18 @@ protected ArrayWritable getValue(org.apache.hadoop.io.Text line) {
 	
 	String[] intArray = str.split(",");
 	
-	//Writable[] intArray = Arrays.stream(str.toString().split(","));
-		    //.mapToDouble(Double::parseDouble)
-		    //.toArray();
+	
 	IntWritable[] intWriArray = new IntWritable[intArray.length];
 	for (int i=0;i<intArray.length;i++) {
 		intWriArray[i] = new IntWritable(Integer.parseInt(intArray[i]));
 	}
 		    
 
-//	   int[] in =   Arrays.stream(intArray.split(','))
-//	                 .mapToInt(Integer::parseInt)
-//	                 .toArray();
-////	
 	ArrayWritable p = new ArrayWritable(IntWritable.class,intWriArray);
-   // p.set(intWriArray);
-	//System.out.println(p);
-//System.out.println("helloooooo");
 
-	//Text t1 = new Text(str);	
-	 //System.out.println(t1);
+	
 	return p;
 	
-	
-//	String arr[] = str.split(",");
-//	int len = arr.length;
-//	LongWritable[] array = new LongWritable[len];
-//	
-//	for(int i=0;i<len;i++) {
-//		array[i] =  new LongWritable( Long.parseLong(arr[i]));
-//	}
-	
-	//ArrayWritable aw = new ArrayWritable((Class<? extends Writable>) EdgeInputFormat.class,array);
-	//aw.set(array);
-
-	
-	//Arrays.stream(str.split(",")).map(String::trim);
-	//.mapToInt(Integer::parseInt).toArray();
-
-	
-
 }
 
 }
