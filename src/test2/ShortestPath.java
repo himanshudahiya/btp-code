@@ -86,6 +86,8 @@ public class ShortestPath extends BasicComputation<
 		 
       Vertex<LongWritable, DoubleWritable, ArrayWritable> vertex,
       Iterable<DoubleWritable> messages) throws IOException {
+	  
+//	  System.out.println("Enter compute------------------------------------");
   	  
 	    if (getSuperstep() == 0) {
 	        vertex.setValue(new DoubleWritable(Double.MAX_VALUE));
